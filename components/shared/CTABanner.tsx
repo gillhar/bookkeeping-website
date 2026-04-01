@@ -1,5 +1,6 @@
 "use client";
 
+import { useRef, useCallback } from "react";
 import { motion, type Easing } from "framer-motion";
 import Button from "./Button";
 
@@ -25,11 +26,38 @@ export default function CTABanner({
   ctaLabel = "Schedule a Call",
   ctaHref = "/contact",
 }: CTABannerProps) {
+  const sectionRef = useRef<HTMLElement>(null);
+  const spotlightRef = useRef<HTMLDivElement>(null);
+
+  const handleMouseMove = useCallback((e: React.MouseEvent<HTMLElement>) => {
+    if (!spotlightRef.current || !sectionRef.current) return;
+    const rect = sectionRef.current.getBoundingClientRect();
+    spotlightRef.current.style.background =
+      `radial-gradient(600px circle at ${e.clientX - rect.left}px ${e.clientY - rect.top}px, rgba(201,168,76,0.10) 0%, transparent 65%)`;
+  }, []);
+
+  const handleMouseLeave = useCallback(() => {
+    if (spotlightRef.current) spotlightRef.current.style.background = "";
+  }, []);
+
   return (
-    <section className={`relative overflow-hidden ${bgClasses[bg]}`}>
+    <section
+      ref={sectionRef}
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
+      className={`relative overflow-hidden ${bgClasses[bg]}`}
+    >
       {/* Noise overlay */}
       <div
         className="absolute inset-0 pointer-events-none opacity-[0.04] noise-bg"
+        aria-hidden="true"
+      />
+
+      {/* Cursor spotlight */}
+      <div
+        ref={spotlightRef}
+        className="absolute inset-0 pointer-events-none z-[1]"
+        style={{ transition: "background 0.2s ease" }}
         aria-hidden="true"
       />
 

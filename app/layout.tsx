@@ -79,6 +79,11 @@ export default function RootLayout({
       className={`${playfairDisplay.variable} ${dmSans.variable} ${jetbrainsMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
+        {/* CSS scroll-driven progress bar — gold line grows as you scroll */}
+        <div
+          className="scroll-progress-bar fixed top-0 left-0 right-0 h-[2px] z-[200] bg-[var(--color-gold-accent)] pointer-events-none"
+          aria-hidden="true"
+        />
         <RouteProgress />
         <Navigation />
         <main className="flex-1 flex flex-col">

@@ -38,6 +38,8 @@ export default function Testimonials() {
   const [active, setActive] = useState(0);
   const [direction, setDirection] = useState(1);
   const paused = useRef(false);
+  const sectionRef = useRef<HTMLElement>(null);
+  const spotlightRef = useRef<HTMLDivElement>(null);
 
   const goTo = useCallback(
     (index: number) => {
@@ -60,6 +62,19 @@ export default function Testimonials() {
     return () => clearInterval(id);
   }, [next]);
 
+  /* Cursor spotlight */
+  const handleMouseMove = useCallback((e: React.MouseEvent<HTMLElement>) => {
+    if (!spotlightRef.current || !sectionRef.current) return;
+    const rect = sectionRef.current.getBoundingClientRect();
+    spotlightRef.current.style.background =
+      `radial-gradient(650px circle at ${e.clientX - rect.left}px ${e.clientY - rect.top}px, rgba(201,168,76,0.09) 0%, transparent 65%)`;
+  }, []);
+
+  const handleMouseLeave = useCallback(() => {
+    paused.current = false;
+    if (spotlightRef.current) spotlightRef.current.style.background = "";
+  }, []);
+
   const variants = {
     enter: (dir: number) => ({
       opacity: 0,
@@ -79,14 +94,38 @@ export default function Testimonials() {
 
   return (
     <section
+      ref={sectionRef}
+      onMouseMove={handleMouseMove}
+      onMouseEnter={() => { paused.current = true; }}
+      onMouseLeave={handleMouseLeave}
       className="relative py-20 md:py-32 lg:py-40 bg-[var(--color-deep-navy)] overflow-hidden"
       aria-label="Client testimonials"
-      onMouseEnter={() => { paused.current = true; }}
-      onMouseLeave={() => { paused.current = false; }}
     >
+      {/* Ambient orb — slowly drifts in the background */}
+      <div
+        className="testimonials-orb absolute pointer-events-none"
+        style={{
+          width: "55%",
+          height: "120%",
+          top: "-10%",
+          left: "5%",
+          background: "radial-gradient(ellipse, rgba(201,168,76,0.065) 0%, transparent 65%)",
+          filter: "blur(48px)",
+        }}
+        aria-hidden="true"
+      />
+
       {/* Subtle noise */}
       <div
         className="absolute inset-0 pointer-events-none opacity-[0.03] noise-bg"
+        aria-hidden="true"
+      />
+
+      {/* Cursor spotlight */}
+      <div
+        ref={spotlightRef}
+        className="absolute inset-0 pointer-events-none z-[1]"
+        style={{ transition: "background 0.25s ease" }}
         aria-hidden="true"
       />
 
@@ -103,7 +142,7 @@ export default function Testimonials() {
       </svg>
 
       <div className="relative z-10 max-w-[860px] mx-auto px-6 lg:px-8 text-center">
-        {/* Carousel — use padding-based height so quotes never clip on mobile */}
+        {/* Carousel */}
         <div className="relative py-6 mb-12">
           <AnimatePresence mode="wait" custom={direction}>
             <motion.div
@@ -125,9 +164,7 @@ export default function Testimonials() {
                   <p className="text-sm font-semibold text-white mb-1">
                     {testimonials[active].name}
                   </p>
-                  <p
-                    className="text-xs uppercase tracking-[0.18em] text-[var(--color-stone)]"
-                  >
+                  <p className="text-xs uppercase tracking-[0.18em] text-[var(--color-stone)]">
                     {testimonials[active].company}
                   </p>
                 </footer>

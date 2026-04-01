@@ -6,6 +6,11 @@ import SectionHeading from "@/components/shared/SectionHeading";
 
 const ease: Easing = [0.16, 1, 0.3, 1];
 
+// Concrete hex values — Framer Motion needs these for colour interpolation
+const STONE  = "#A8A29E";
+const GOLD   = "#C9A84C";
+const CHARCOAL = "#1C1C1E";
+
 const services = [
   {
     number: "01",
@@ -74,57 +79,104 @@ export default function ServicesOverview() {
           </motion.p>
         </div>
 
-        {/* Editorial numbered list */}
+        {/* Numbered list */}
         <div className="border-t border-[var(--color-border)]">
           {services.map((service, i) => (
             <motion.div
               key={service.number}
-              initial={{ opacity: 0, y: 16 }}
-              whileInView={{ opacity: 1, y: 0 }}
+              /* ── Entrance: clip-wipe from left ── */
+              initial={{ clipPath: "inset(0 100% 0 0)" }}
+              whileInView={{ clipPath: "inset(0 0% 0 0)" }}
               viewport={{ once: true, amount: 0.1 }}
-              transition={{ duration: 0.55, delay: i * 0.05, ease }}
-              className="group border-b border-[var(--color-border)]"
+              transition={{ duration: 0.7, delay: i * 0.07, ease }}
+              /* ── Hover: broadcast "h" variant to all children ── */
+              whileHover="h"
+              className="relative border-b border-[var(--color-border)]"
             >
+              {/* Warm tint overlay on hover */}
+              <motion.div
+                className="absolute inset-0 pointer-events-none"
+                style={{ backgroundColor: "rgba(201,168,76,0)" }}
+                variants={{
+                  h: { backgroundColor: "rgba(201,168,76,0.028)", transition: { duration: 0.35 } },
+                }}
+                aria-hidden="true"
+              />
+
+              {/* Gold signature line draws left→right on hover */}
+              <motion.div
+                className="absolute bottom-[-1px] left-0 right-0 h-[1.5px] bg-[var(--color-gold-accent)] origin-left"
+                style={{ scaleX: 0 }}
+                variants={{
+                  h: { scaleX: 1, transition: { duration: 0.55, ease } },
+                }}
+                aria-hidden="true"
+              />
+
               <Link
                 href={service.href}
                 aria-label={`Learn more about ${service.name}`}
-                className="flex items-start md:items-center gap-5 md:gap-8 py-6 md:py-7"
+                className="relative z-10 flex items-start gap-5 md:gap-8 py-7 md:py-8"
               >
                 {/* Number */}
-                <span
-                  className="flex-shrink-0 text-sm text-[var(--color-stone)] w-7 mt-0.5 md:mt-0 tabular-nums transition-colors duration-300 group-hover:text-[var(--color-gold-accent)]"
-                  style={{ fontFamily: "var(--font-mono)" }}
+                <motion.span
+                  className="flex-shrink-0 text-sm w-7 mt-1 tabular-nums"
+                  style={{ fontFamily: "var(--font-mono)", color: STONE, display: "inline-block" }}
+                  variants={{
+                    h: { color: GOLD, scale: 1.2, transition: { duration: 0.25, ease } },
+                  }}
                   aria-hidden="true"
                 >
                   {service.number}
-                </span>
+                </motion.span>
 
                 {/* Name + description */}
-                <div className="flex-1 min-w-0 flex flex-col md:flex-row md:items-center md:gap-8">
-                  <h3
-                    className="flex-shrink-0 md:w-[240px] text-base md:text-lg font-semibold text-[var(--color-charcoal)] leading-snug tracking-[-0.01em]"
-                    style={{ fontFamily: "var(--font-display)" }}
+                <div className="flex-1 min-w-0 flex flex-col md:flex-row md:gap-8">
+                  <motion.h3
+                    className="flex-shrink-0 md:w-[240px] text-base md:text-lg font-semibold leading-snug tracking-[-0.01em] text-[var(--color-charcoal)]"
+                    style={{ fontFamily: "var(--font-display)", color: CHARCOAL }}
+                    variants={{
+                      h: { x: 5, transition: { duration: 0.3, ease } },
+                    }}
                   >
                     {service.name}
-                  </h3>
-                  <p className="mt-1 md:mt-0 flex-1 text-sm text-[var(--color-text-secondary)] leading-relaxed">
-                    {service.description}
-                  </p>
+                  </motion.h3>
+
+                  <div className="flex-1 min-w-0 mt-1 md:mt-0">
+                    <p className="text-sm text-[var(--color-text-secondary)] leading-relaxed">
+                      {service.description}
+                    </p>
+                    {/* Reveal on hover — desktop only */}
+                    <motion.p
+                      className="hidden md:block text-xs font-medium mt-2 tracking-wide"
+                      style={{ color: GOLD, opacity: 0 }}
+                      variants={{
+                        h: { opacity: 1, transition: { duration: 0.2, delay: 0.14 } },
+                      }}
+                      aria-hidden="true"
+                    >
+                      Explore this service ——→
+                    </motion.p>
+                  </div>
                 </div>
 
                 {/* Arrow */}
-                <span
-                  className="flex-shrink-0 mt-0.5 md:mt-0 text-[var(--color-stone)] transition-all duration-300 group-hover:text-[var(--color-gold-accent)] group-hover:translate-x-1.5 inline-block"
+                <motion.span
+                  className="flex-shrink-0 mt-1 inline-block"
+                  style={{ color: STONE }}
+                  variants={{
+                    h: { x: 10, color: GOLD, transition: { duration: 0.3, ease } },
+                  }}
                   aria-hidden="true"
                 >
                   →
-                </span>
+                </motion.span>
               </Link>
             </motion.div>
           ))}
         </div>
 
-        {/* Trailing link to full services page */}
+        {/* View all */}
         <motion.div
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
@@ -138,13 +190,14 @@ export default function ServicesOverview() {
           >
             View all service details
             <span
-              className="inline-block transition-transform duration-200 group-hover:translate-x-1"
+              className="inline-block transition-transform duration-200 group-hover:translate-x-1.5"
               aria-hidden="true"
             >
               →
             </span>
           </Link>
         </motion.div>
+
       </div>
     </section>
   );
