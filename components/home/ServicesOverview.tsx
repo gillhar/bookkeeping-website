@@ -7,13 +7,12 @@ import SectionHeading from "@/components/shared/SectionHeading";
 const ease: Easing = [0.16, 1, 0.3, 1];
 
 // Concrete hex values — Framer Motion needs these for colour interpolation
-const WARM_WHITE   = "#FAF9F6";
-const STONE        = "#A8A29E";
-const GOLD         = "#C9A84C";
-const CHARCOAL     = "#1C1C1E";
-const NAVY         = "#1B2A4A";
-const TEXT_SEC     = "#57534E";
-const WHITE_65     = "rgba(250,249,246,0.65)";
+const WARM_WHITE = "#FAF9F6";
+const STONE      = "#A8A29E";
+const GOLD       = "#C9A84C";
+const CHARCOAL   = "#1C1C1E";
+const TEXT_SEC   = "#57534E";
+const WHITE_65   = "rgba(250,249,246,0.65)";
 
 const services = [
   {
@@ -62,11 +61,35 @@ const services = [
 
 export default function ServicesOverview() {
   return (
-    <section className="py-20 md:py-32 lg:py-40 bg-[var(--color-warm-white)]">
-      <div className="max-w-[1200px] mx-auto px-6 lg:px-8">
+    <section className="relative py-20 md:py-32 lg:py-40 bg-[var(--color-deep-navy)] overflow-hidden">
 
-        {/* Section header */}
-        <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-8 mb-16 lg:mb-20">
+      {/* Subtle noise texture */}
+      <div
+        className="absolute inset-0 pointer-events-none opacity-[0.03] noise-bg"
+        aria-hidden="true"
+      />
+
+      {/* Ambient gold glow — top-right corner */}
+      <div
+        className="absolute -top-32 -right-32 w-[600px] h-[600px] pointer-events-none"
+        style={{
+          background: "radial-gradient(ellipse, rgba(201,168,76,0.07) 0%, transparent 65%)",
+          filter: "blur(40px)",
+        }}
+        aria-hidden="true"
+      />
+
+      <div className="relative z-10 max-w-[1200px] mx-auto px-6 lg:px-8">
+
+        {/* Section header — CSS variable override for dark bg */}
+        <div
+          className="flex flex-col md:flex-row md:items-end md:justify-between gap-8 mb-16 lg:mb-20"
+          style={{
+            "--color-charcoal": WARM_WHITE,
+            "--color-text-secondary": WHITE_65,
+            "--color-text-sage": GOLD,
+          } as React.CSSProperties}
+        >
           <SectionHeading
             subtitle="What We Do"
             title="Everything your business needs."
@@ -77,14 +100,15 @@ export default function ServicesOverview() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, amount: 0.4 }}
             transition={{ duration: 0.6, delay: 0.15, ease }}
-            className="text-sm text-[var(--color-text-secondary)] max-w-xs md:text-right md:pb-1 leading-relaxed"
+            className="text-sm max-w-xs md:text-right md:pb-1 leading-relaxed"
+            style={{ color: WHITE_65 }}
           >
             Six core services, one dedicated team.
           </motion.p>
         </div>
 
         {/* Numbered list */}
-        <div className="border-t border-[var(--color-border)]">
+        <div className="border-t border-white/10">
           {services.map((service, i) => (
             <motion.div
               key={service.number}
@@ -95,12 +119,12 @@ export default function ServicesOverview() {
               transition={{ duration: 0.7, delay: i * 0.07, ease }}
               /* ── Hover: broadcast "h" variant to all children ── */
               whileHover="h"
-              className="relative border-b border-[var(--color-border)] overflow-hidden"
+              className="relative border-b border-white/10 overflow-hidden"
             >
-              {/* ── Navy background wipes in from left ── */}
+              {/* ── Warm-white background wipes in from left on hover ── */}
               <motion.div
                 className="absolute inset-0 pointer-events-none"
-                style={{ backgroundColor: NAVY, scaleX: 0, originX: 0 }}
+                style={{ backgroundColor: WARM_WHITE, scaleX: 0, originX: 0 }}
                 variants={{
                   h: { scaleX: 1, transition: { duration: 0.52, ease } },
                 }}
@@ -130,7 +154,7 @@ export default function ServicesOverview() {
                 }}
                 variants={{
                   h: {
-                    opacity: 0.09,
+                    opacity: 0.12,
                     scale: 1,
                     transition: { duration: 0.5, ease },
                   },
@@ -163,12 +187,12 @@ export default function ServicesOverview() {
                     className="flex-shrink-0 md:w-[240px] text-base md:text-lg font-semibold leading-snug"
                     style={{
                       fontFamily: "var(--font-display)",
-                      color: CHARCOAL,
+                      color: WARM_WHITE,
                       letterSpacing: "-0.01em",
                     }}
                     variants={{
                       h: {
-                        color: WARM_WHITE,
+                        color: CHARCOAL,
                         x: 6,
                         letterSpacing: "0.01em",
                         transition: { duration: 0.35, ease },
@@ -181,9 +205,9 @@ export default function ServicesOverview() {
                   <div className="flex-1 min-w-0 mt-1 md:mt-0">
                     <motion.p
                       className="text-sm leading-relaxed"
-                      style={{ color: TEXT_SEC }}
+                      style={{ color: WHITE_65 }}
                       variants={{
-                        h: { color: WHITE_65, transition: { duration: 0.35, ease } },
+                        h: { color: TEXT_SEC, transition: { duration: 0.35, ease } },
                       }}
                     >
                       {service.description}
@@ -208,7 +232,7 @@ export default function ServicesOverview() {
                   className="flex-shrink-0 mt-1 inline-block text-lg"
                   style={{ color: STONE }}
                   variants={{
-                    h: { x: 14, color: GOLD, scale: 1.15, transition: { duration: 0.3, ease } },
+                    h: { x: 14, color: CHARCOAL, scale: 1.15, transition: { duration: 0.3, ease } },
                   }}
                   aria-hidden="true"
                 >
