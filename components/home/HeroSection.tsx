@@ -105,7 +105,7 @@ export default function HeroSection() {
       />
 
       {/* Content */}
-      <div className="relative z-10 max-w-[1200px] mx-auto px-6 lg:px-8 w-full pt-32 pb-28">
+      <div className="relative z-10 max-w-[1200px] mx-auto px-6 lg:px-8 w-full pt-52 pb-28">
         <div className="max-w-[680px]">
 
           {/* Subtitle */}
@@ -123,7 +123,7 @@ export default function HeroSection() {
             className="font-bold text-white leading-[1.08] tracking-[-0.02em] mb-7"
             style={{
               fontFamily: "var(--font-display)",
-              fontSize: "clamp(48px, 6vw, 72px)",
+              fontSize: "clamp(40px, 4.5vw, 58px)",
             }}
             aria-label={HEADLINE}
           >
