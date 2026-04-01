@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { motion, type Easing } from "framer-motion";
 import Link from "next/link";
 import { ChevronRight } from "lucide-react";
@@ -19,13 +20,24 @@ const item = {
 export default function AboutHero() {
   return (
     <section className="relative min-h-[60dvh] flex items-center overflow-hidden">
-      {/* Background image placeholder */}
-      <div className="absolute inset-0 bg-[#2e2b27]" aria-hidden="true">
-        <div className="absolute inset-0 flex items-center justify-center text-stone-600 text-xs pointer-events-none select-none px-8 text-center">
-          [STOCK PHOTO: Aerial view of a polished conference room table with notebooks, coffee, and warm lighting]
-        </div>
-        <div className="absolute inset-0 bg-[var(--color-charcoal)]/75" />
-      </div>
+      {/* Background photo */}
+      <motion.div
+        className="absolute inset-0"
+        initial={{ scale: 1.06 }}
+        animate={{ scale: 1.0 }}
+        transition={{ duration: 1.8, ease: [0.16, 1, 0.3, 1] }}
+        aria-hidden="true"
+      >
+        <Image
+          src="/images/conferencetablearielview.jpg"
+          alt="Aerial view of a conference room table with warm lighting"
+          fill
+          priority
+          className="object-cover object-center"
+          sizes="100vw"
+        />
+      </motion.div>
+      <div className="absolute inset-0 bg-[var(--color-charcoal)]/75" aria-hidden="true" />
 
       {/* Noise */}
       <div

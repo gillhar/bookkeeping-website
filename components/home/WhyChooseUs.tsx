@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { motion, type Easing } from "framer-motion";
 import SectionHeading from "@/components/shared/SectionHeading";
 
@@ -15,8 +16,8 @@ const rows = [
       "Deep familiarity with your accounts",
       "Proactive advice, not just compliance",
     ],
-    photo:
-      "Close-up of hands writing in a leather-bound ledger with a fountain pen, warm desk lamp lighting",
+    image: "/images/women-journaling.jpg",
+    imageAlt: "Woman writing notes at a desk with warm lighting",
     imageLeft: true,
   },
   {
@@ -28,8 +29,8 @@ const rows = [
       "Automated reconciliation workflows",
       "Live dashboards you can read in 60 seconds",
     ],
-    photo:
-      "Dual monitor setup showing financial dashboards and charts, clean modern desk setup",
+    image: "/images/financialdashboardmonitor.jpg",
+    imageAlt: "Financial dashboard on a monitor showing charts and data",
     imageLeft: false,
   },
   {
@@ -41,20 +42,22 @@ const rows = [
       "Fixed, predictable pricing",
       "Response within one business day, always",
     ],
-    photo:
-      "Two professionals having a relaxed meeting at a coffee table, natural light, open body language",
+    image: "/images/businessmeetingnaturallight.jpg",
+    imageAlt: "Two professionals in a relaxed meeting with natural light",
     imageLeft: true,
   },
 ];
 
-function ImagePlaceholder({ description }: { description: string }) {
+function RowImage({ src, alt }: { src: string; alt: string }) {
   return (
-    <div className="relative w-full aspect-[4/3] bg-[#d4cfc9] rounded-xl overflow-hidden shadow-[0_16px_60px_rgba(0,0,0,0.10)]">
-      <div className="absolute inset-0 flex items-center justify-center px-8">
-        <p className="text-stone-500 text-xs text-center leading-relaxed select-none pointer-events-none">
-          [STOCK PHOTO: {description}]
-        </p>
-      </div>
+    <div className="relative w-full aspect-[4/3] rounded-xl overflow-hidden shadow-[0_16px_60px_rgba(0,0,0,0.10)] group">
+      <Image
+        src={src}
+        alt={alt}
+        fill
+        className="object-cover object-center transition-transform duration-700 ease-out group-hover:scale-105"
+        sizes="(max-width: 1024px) 100vw, 50vw"
+      />
     </div>
   );
 }
@@ -90,7 +93,7 @@ export default function WhyChooseUs() {
                   viewport={{ once: true, amount: 0.2 }}
                   transition={{ duration: 0.7, ease }}
                 >
-                  <ImagePlaceholder description={row.photo} />
+                  <RowImage src={row.image} alt={row.imageAlt} />
                 </motion.div>
 
                 {/* Content side */}

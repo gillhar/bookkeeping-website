@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { motion, type Easing } from "framer-motion";
 import SectionHeading from "@/components/shared/SectionHeading";
 import AnimatedCounter from "@/components/shared/AnimatedCounter";
@@ -26,12 +27,14 @@ export default function AboutSnapshot() {
             transition={{ duration: 0.85, ease }}
             className="relative lg:-ml-10"
           >
-            <div className="relative w-full aspect-[4/3] rounded-xl overflow-hidden shadow-[0_24px_80px_rgba(0,0,0,0.12)]">
-              <div className="absolute inset-0 bg-[#c8bfb4] flex items-center justify-center">
-                <p className="text-stone-500 text-xs text-center px-8 select-none pointer-events-none leading-relaxed">
-                  [STOCK PHOTO: Professional woman reviewing financial documents at a modern desk, natural light, warm tones]
-                </p>
-              </div>
+            <div className="relative w-full aspect-[4/3] rounded-xl overflow-hidden shadow-[0_24px_80px_rgba(0,0,0,0.12)] group">
+              <Image
+                src="/images/femaleaccountantworking.jpg"
+                alt="Professional woman reviewing financial documents at a modern desk"
+                fill
+                className="object-cover object-center transition-transform duration-700 ease-out group-hover:scale-105"
+                sizes="(max-width: 1024px) 100vw, 55vw"
+              />
             </div>
 
             {/* Decorative gold accent corner */}
