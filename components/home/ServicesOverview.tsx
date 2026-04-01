@@ -112,11 +112,11 @@ export default function ServicesOverview() {
           {services.map((service, i) => (
             <motion.div
               key={service.number}
-              /* ── Entrance: clip-wipe from left ── */
-              initial={{ clipPath: "inset(0 100% 0 0)" }}
-              whileInView={{ clipPath: "inset(0 0% 0 0)" }}
-              viewport={{ once: true, amount: 0.1 }}
-              transition={{ duration: 0.7, delay: i * 0.07, ease }}
+              /* ── Entrance: fade-up ── */
+              initial={{ opacity: 0, y: 12 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.05 }}
+              transition={{ duration: 0.6, delay: i * 0.07, ease }}
               /* ── Hover: broadcast "h" variant to all children ── */
               whileHover="h"
               className="relative border-b border-white/10 overflow-hidden"
